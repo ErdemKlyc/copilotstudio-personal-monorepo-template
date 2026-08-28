@@ -36,7 +36,14 @@ from mcp.server.fastmcp import FastMCP
 VAULT_ROOT = Path(__file__).resolve().parents[2]
 TOPICS = VAULT_ROOT / ".copilotstudio" / "topics"
 
-mcp = FastMCP("vault-tools")
+mcp = FastMCP(
+    "vault-tools",
+    host=os.environ.get("MCP_HOST", "127.0.0.1"),
+    # Most free hosting platforms (Render, Railway, etc.) inject the port to
+    # bind to as $PORT rather than a custom name; MCP_PORT wins if you set it.
+    port=int(os.environ.get("MCP_PORT", os.environ.get("PORT", "8000"))),
+    streamable_http_path="/mcp",
+)
 
 
 def _run(argv: list[str]) -> str:
@@ -140,9 +147,4 @@ def new_project_note(title: str, slug: str = "", dry_run: bool = False) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run(
-        transport="streamable-http",
-        host=os.environ.get("MCP_HOST", "127.0.0.1"),
-        port=int(os.environ.get("MCP_PORT", "8000")),
-        path="/mcp",
-    )
+    mcp.run(transport="streamable-http")

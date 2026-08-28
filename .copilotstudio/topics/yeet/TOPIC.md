@@ -38,4 +38,6 @@ last_edited: 2026-06-15
 
 ## Platform Notes
 
-This topic assumes the agent has a shell/code-execution Tool available to run `git` and `gh`. Copilot Studio does not run local processes by default — wire up that Tool (or an equivalent GitHub connector) before relying on this topic end to end. The `codex/...` branch/PR-title convention from the original template is renamed to `copilot/...` here; change it back if your team uses a different prefix.
+**Same fundamental gap as `gh-commit`, plus more of it.** This entire flow — creating a branch, staging a working tree, running local checks, pushing, opening a PR — assumes a live local git checkout with a shell to run commands in. Copilot Studio agents have neither. There is no Tool or Agent flow that reasonably substitutes for "run the project's test suite against a working copy" from inside a knowledge-vault chatbot.
+
+Keep this topic for reference, but run it from somewhere with actual repo/shell access — a coding agent (for example GitHub Copilot's coding agent) or a human's local git client — not this vault assistant. The `codex/...` branch/PR-title convention from the original template is renamed to `copilot/...` here; change it back if your team uses a different prefix, wherever you actually run this.

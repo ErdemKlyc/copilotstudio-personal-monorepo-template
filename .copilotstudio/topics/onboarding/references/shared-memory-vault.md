@@ -40,7 +40,7 @@ After the interview is calibrated:
 
 1. Explain the vault in one short paragraph.
 2. Ask before creating or extending it.
-3. If approved, run `../scripts/setup_shared_memory_vault.py` from this repo. Do not pass `--vault-dir` unless the user explicitly chose a different root.
+3. This template repo already ships the vault scaffold (`AGENTS.md`, `people/`, `projects/`, `templates/`). In the normal case there is nothing to create — inspect what's already there and skip to step 4. Only if a required file (`AGENTS.md`, `TODO.md`, `agent/USER_CONTEXT.md`, `projects/README.md`, `projects/AGENTS.md`) is genuinely missing, create just that file via the same "Create file" Agent-flow pattern described in the `new-person`/`new-project` topics' Platform Notes, using `../scripts/setup_shared_memory_vault.py`'s file templates as the content source (that script is kept in this repo as the canonical copy of those templates, not as something this topic runs directly).
 4. Personalize `AGENTS.md` and `agent/USER_CONTEXT.md`.
 5. Mention the path in the final recap.
 

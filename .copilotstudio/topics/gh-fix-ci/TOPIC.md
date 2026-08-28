@@ -15,66 +15,44 @@ last_edited: 2026-06-15
 
 ## Overview
 
-Use `gh` to locate failing PR checks, fetch GitHub Actions logs for actionable failures, summarize the failure snippet, then propose a fix plan and implement after explicit approval.
-- If a plan-oriented topic (for example `create-plan`) is available elsewhere in this agent, use it; otherwise draft a concise plan inline and request approval before implementing.
-
-Prereq: authenticate with the GitHub CLI once, then confirm auth with `gh auth status` (repo + workflow scopes are typically required).
+Ask for the repo (`owner/repo`) and PR number, inspect failing checks, summarize the failure, then propose a fix plan and implement after explicit approval.
 
 ## Inputs
 
-- `repo`: path inside the repo (default `.`)
-- `pr`: PR number or URL (optional; defaults to current branch PR)
-- `gh` authentication for the repo host
-
-## Quick start
-
-- `python "<path-to-topic>/scripts/inspect_pr_checks.py" --repo "." --pr "<number-or-url>"`
-- Add `--json` if you want machine-friendly output for summarization.
+- `owner`/`repo`: the GitHub repository (always ask explicitly — see Platform Notes for why)
+- `pr`: PR number
 
 ## Workflow
 
-1. Verify gh authentication.
-   - Run `gh auth status`.
-   - If unauthenticated or `gh` isn't installed, ask the user to install/authenticate (`gh auth login`) before proceeding.
-2. Resolve the PR.
-   - Prefer the current branch PR: `gh pr view --json number,url`.
-   - If the user provides a PR number or URL, use that directly.
-3. Inspect failing checks (GitHub Actions only).
-   - Preferred: run the bundled script (handles gh field drift and job-log fallbacks):
-     - `python "<path-to-topic>/scripts/inspect_pr_checks.py" --repo "." --pr "<number-or-url>"`
-     - Add `--json` for machine-friendly output.
-   - Manual fallback:
-     - `gh pr checks <pr> --json name,state,bucket,link,startedAt,completedAt,workflow`
-       - If a field is rejected, rerun with the available fields reported by `gh`.
-     - For each failing check, extract the run id from `detailsUrl` and run:
-       - `gh run view <run_id> --json name,workflowName,conclusion,status,url,event,headBranch,headSha`
-       - `gh run view <run_id> --log`
-     - If the run log says it is still in progress, fetch job logs directly:
-       - `gh api "/repos/<owner>/<repo>/actions/jobs/<job_id>/logs" > "<path>"`
-4. Scope non-GitHub Actions checks.
-   - If `detailsUrl` is not a GitHub Actions run, label it as external and only report the URL.
+1. Resolve the PR.
+   - Ask for the repo and PR number if not already given; there is no "current branch" to infer them from.
+2. Inspect failing checks (GitHub Actions only).
+   - Call the `inspect-pr-checks` Tool (see Platform Notes) with `owner`, `repo`, `pr`.
+3. Scope non-GitHub Actions checks.
+   - If a check's details URL isn't a GitHub Actions run, label it as external and only report the URL.
    - Do not attempt Buildkite or other providers; keep the workflow lean.
-5. Summarize failures for the user.
-   - Provide the failing check name, run URL (if any), and a concise log snippet.
+4. Summarize failures for the user.
+   - Provide the failing check name, run URL, and a concise log snippet when the flow returns one.
    - Call out missing logs explicitly.
-6. Create a plan.
+5. Create a plan.
    - Draft a concise plan and request approval before implementing.
-7. Implement after approval.
-   - Apply the approved plan, summarize diffs/tests, and ask about opening a PR.
-8. Recheck status.
-   - After changes, suggest re-running the relevant tests and `gh pr checks` to confirm.
-
-## Bundled Resources
-
-### scripts/inspect_pr_checks.py
-
-Fetch failing PR checks, pull GitHub Actions logs, and extract a failure snippet. Exits non-zero when failures remain so it can be used in automation.
-
-Usage examples:
-- `python "<path-to-topic>/scripts/inspect_pr_checks.py" --repo "." --pr "123"`
-- `python "<path-to-topic>/scripts/inspect_pr_checks.py" --repo "." --pr "https://github.com/org/repo/pull/123" --json`
-- `python "<path-to-topic>/scripts/inspect_pr_checks.py" --repo "." --max-lines 200 --context 40`
+6. Implement after approval.
+   - This step requires a real code-editing capability on the actual repo checkout, which this topic alone doesn't have — see `gh-commit`'s Platform Notes for why that's a harder platform gap than fetching check status is.
+7. Recheck status.
+   - After changes are made (by whatever capability handled step 6), suggest re-running `inspect-pr-checks` to confirm.
 
 ## Platform Notes
 
-This topic assumes a shell/code-execution Tool is registered so the agent can run `gh` and the bundled Python script, or a GitHub connector Tool that offers equivalent capability. Copilot Studio does not run local processes by default — wire that up before relying on this topic end to end. The Codex CLI original preferred an internal `oai_gh` wrapper; that has no Copilot Studio equivalent, so this topic uses plain `gh`.
+**"Current branch" has no meaning here**, same as `gh-address-comments`: this topic always asks for an explicit repo and PR number rather than inferring either from a local checkout that doesn't exist in Copilot Studio.
+
+**Same connector-catalog dependency as `gh-address-comments`.** Checking status needs an `inspect-pr-checks` Tool:
+
+- **If Agent flow, custom REST API, or a GitHub connector with the needed actions is available**: call `GET /repos/{owner}/{repo}/commits/{ref}/check-runs` for the PR's head commit (get the head SHA from `GET /repos/{owner}/{repo}/pulls/{pr}` first), filter to failing conclusions, and return each one's name/conclusion/details URL. As a stretch goal, per-job log text is available at `GET /repos/{owner}/{repo}/actions/jobs/{job_id}/logs` (plain text, unlike the full-run-logs endpoint which returns a zip).
+- **If only prebuilt Connector actions are available**: search "GitHub" in the Connector picker and check whether it exposes check-run/status actions. If it doesn't, this topic is blocked in your tenant — say so plainly rather than improvising a fake status check.
+
+<details>
+<summary>Legacy option: the bundled Python script</summary>
+
+`scripts/inspect_pr_checks.py` shells out to `gh` and assumes a local checkout on the current branch. Only useful with a genuine persistently-hosted, git-checked-out environment to run it in — see `.copilotstudio/tools/README.md` for the MCP-server option and why it's no longer the recommended default.
+
+</details>

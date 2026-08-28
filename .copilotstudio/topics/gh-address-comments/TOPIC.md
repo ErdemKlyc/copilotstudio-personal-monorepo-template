@@ -12,12 +12,10 @@ last_edited: 2026-06-15
 - "handle the review feedback"
 - "respond to reviewer comments on this PR"
 
-Guide to find the open PR for the current branch and address its comments with `gh`.
-
-Prereq: ensure the GitHub CLI is installed and authenticated. Run `gh auth status`. If it is not available or auth is missing, ask the user to install/authenticate before continuing.
+Ask for the repo (`owner/repo`) and PR number, then fetch and address its review comments.
 
 ## 1) Inspect comments needing attention
-- Run scripts/fetch_comments.py which will print out all the comments and review threads on the PR
+- Call the `fetch-pr-comments` Tool (see Platform Notes) with the repo and PR number.
 
 ## 2) Ask the user for clarification
 - Number all the review threads and comments and provide a short summary of what would be required to apply a fix for it
@@ -26,9 +24,20 @@ Prereq: ensure the GitHub CLI is installed and authenticated. Run `gh auth statu
 ## 3) If user chooses comments
 - Apply fixes for the selected comments
 
-Notes:
-- If GitHub auth/rate issues appear mid-run, prompt the user to re-authenticate with `gh auth login`, then retry.
-
 ## Platform Notes
 
-The original Codex CLI version of this skill preferred an internal `oai_gh` CLI wrapper over plain `gh`, falling back to `gh` when it was not present. That wrapper is a Codex-sandbox-specific convenience and has no Copilot Studio equivalent, so this topic uses plain `gh` throughout. This topic also assumes the agent has a shell/code-execution Tool available to actually run `gh` and the bundled script — Copilot Studio does not run local processes by default, so wire that Action (or an equivalent GitHub connector) up before relying on this topic end to end.
+**"Current branch" has no meaning here.** The original Codex CLI version of this topic resolved the PR from a local git checkout's current branch, and shelled out to `gh` (or a Codex-sandbox-specific `oai_gh` wrapper, dropped here since it has no Copilot Studio equivalent). Copilot Studio agents have no working tree at all, so this topic always asks for an explicit `owner/repo` and PR number instead of trying to infer either.
+
+**This one depends on your tenant's connector catalog, unlike `new-person`/`new-project`.** Fetching comments needs a `fetch-pr-comments` Tool, and how you build it depends on what's available under Tools > Add a tool:
+
+- **If Agent flow, custom REST API, or a GitHub connector with the needed actions is available**: build `fetch-pr-comments` calling `GET /repos/{owner}/{repo}/pulls/{pr}/comments` (review comments) and `GET /repos/{owner}/{repo}/issues/{pr}/comments` (issue-level comments), combine and number the results.
+- **If only prebuilt Connector actions are available (Flow/MCP/REST API disabled — the common enterprise-lockdown case)**: search "GitHub" in the Connector picker and check what actions it actually exposes. There is no guarantee it covers PR/issue comments specifically — if it doesn't, this topic is blocked in your tenant with no other route available, and that's worth telling the user plainly rather than pretending a workaround exists.
+
+Applying fixes (step 3) still requires a real code-editing capability on the actual repo checkout — this topic can plan the fix and describe it, but committing it back is `gh-commit`'s job, which has its own, more fundamental platform limitation (see its Platform Notes).
+
+<details>
+<summary>Legacy option: the bundled Python script</summary>
+
+`scripts/fetch_comments.py` shells out to `gh api graphql` and assumes a local checkout on the current branch. Only useful with a genuine persistently-hosted, git-checked-out environment to run it in — see `.copilotstudio/tools/README.md` for the MCP-server option and why it's no longer the recommended default.
+
+</details>

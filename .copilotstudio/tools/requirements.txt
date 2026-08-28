@@ -1,1 +1,5 @@
-mcp>=1.0.0
+# Pinned below 2.0: mcp 2.x renamed FastMCP to MCPServer and changed the
+# run() signature (see https://py.sdk.modelcontextprotocol.io/v2/migration/).
+# This server is written against the 1.x FastMCP API. Upgrade deliberately
+# and update mcp_server.py's imports/run() call to match if you move to 2.x.
+mcp>=1.0.0,<2.0.0

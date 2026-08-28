@@ -42,9 +42,11 @@ knowledge_sources:
       Optional alternative if this vault is published as a static site
       (for example via GitHub Pages) and you only need read access, not write-back.
 
-# Tools: each Topic below maps to a folder in .copilotstudio/topics/. Topics
-# that shell out to the bundled Python scripts need a matching Tool wired up —
-# see .copilotstudio/tools/README.md for the MCP-server option.
+# Tools: each Topic below maps to a folder in .copilotstudio/topics/. What's
+# available under Tools > Add a tool varies by tenant -- some enterprise
+# environments disable Flow, MCP, Custom connector, and REST API entirely,
+# leaving only prebuilt Connector actions. Check before assuming any one
+# path below is available; see connector_tools and .copilotstudio/README.md.
 topics:
   - assistant
   - onboarding
@@ -62,22 +64,44 @@ topics:
   - gh-fix-ci
   - yeet
 
+# Default write-back path when only prebuilt Connector actions are available
+# (Flow/MCP/Custom connector/REST API disabled -- the common enterprise-
+# lockdown case). One connector action added directly as a Tool, no flow in
+# between. Full setup: .copilotstudio/README.md > "The create-vault-file /
+# create-vault-folder Tools".
+connector_tools:
+  - name: create-vault-file
+    used_by: [new-person, new-project]
+    connector: "SharePoint or OneDrive for Business"
+    action: "Create file"
+    note: "Does not auto-create missing folders -- pair with create-vault-folder for new subfolders."
+  - name: create-vault-folder
+    used_by: [new-project]
+    connector: "SharePoint or OneDrive for Business"
+    action: "Create new folder"
+
+# If your tenant instead allows Agent flow, Custom connector, or REST API
+# tool types, those are equally valid ways to build the same logic -- see
+# each topic's Platform Notes for the flow/REST-call version.
+
+# gh-address-comments/gh-fix-ci additionally depend on whether a GitHub
+# connector with the right actions exists in your tenant at all. Not
+# guaranteed either way -- check the Connector picker for "GitHub" before
+# assuming these topics work. See .copilotstudio/README.md > "GitHub Topics".
+
+# gh-commit and yeet need a live git working tree, which no Copilot Studio
+# Tool can provide in any tenant configuration. Not solvable here by design
+# — see their TOPIC.md Platform Notes. Run them from a coding agent with
+# real repo/shell access instead (for example GitHub Copilot's coding agent).
+
 tools:
   - name: vault-tools-mcp
     type: mcp_server
     note: >
-      Deploy .copilotstudio/tools/mcp_server.py (Streamable HTTP, not stdio)
-      somewhere HTTPS-reachable, then register it on the agent's Tools page:
-      Add a tool > New tool > Model Context Protocol > fill in server
-      name/description/URL > Create > Add to agent. This is what lets topics
-      that shell out to new_person.py, new_project.py, fetch_comments.py, and
-      inspect_pr_checks.py actually run. See tools/README.md for the full
-      wizard walkthrough.
-  - name: github-connector
-    type: connector
-    note: >
-      Add the GitHub connector (or an equivalent gh-capable Tool) for
-      gh-commit, gh-address-comments, gh-fix-ci, and yeet.
+      Optional alternative to the connector Tools above, only worthwhile
+      with genuine persistent, IT-approved hosting (not a free-tier/
+      ephemeral host, which loses every write on restart) and a tenant
+      where MCP tool registration is actually enabled. See tools/README.md.
   - name: browser-automation
     type: mcp_server_or_connector
     note: >
@@ -88,9 +112,11 @@ publish_channels:
   - custom_website
   - m365_copilot   # publish as an agent inside Microsoft 365 Copilot, if licensed
 
-# Requires generative orchestration turned on (Overview > Orchestration), and
-# in some tenants an admin must turn on "solution-aware cloud flow sharing"
-# for the environment before Triggers appears on the Overview page at all.
+# Requires generative orchestration turned on (it's the default for new
+# agents; verify at Settings > Generative AI > Orchestration if unsure or if
+# this agent predates that default), and in some tenants an admin must turn
+# on "solution-aware cloud flow sharing" for the environment before Triggers
+# appears on the Overview page at all.
 triggers:
   - name: "Assistant hourly check-in"
     type: recurrence   # Overview page > Triggers > Add trigger > Recurrence

@@ -7,8 +7,6 @@ last_edited: 2026-06-15
 Starter workspace for giving a Microsoft Copilot Studio agent durable context: projects, people, topics,
 onboarding, recurring checks, and writing-style memory.
 
-This started as a port of a personal-monorepo template originally built for OpenAI Codex CLI. See [`MIGRATION.md`](MIGRATION.md) for what changed and why — the two platforms have genuinely different building blocks (Topics vs. slash-command skills, Recurrence triggers vs. chat heartbeats, Knowledge sources vs. a locally-readable git repo), so this isn't a drop-in reskin.
-
 This template gives your Copilot Studio agent a place to look before it acts and a place to write
 important context after you approve it:
 
@@ -49,12 +47,14 @@ Writing back to the vault (new project folders, updated `people/*.md`, `GOAL.md`
 ## Set Up The Agent
 
 1. Open Copilot Studio and create (or open) the "Assistant" agent.
-2. Paste `.copilotstudio/agent/instructions.md` into Agent > Overview > Instructions, and turn on **generative orchestration** (Overview > Orchestration) — required later for the Recurrence trigger in step 7.
+2. Paste `.copilotstudio/agent/instructions.md` into the agent's Overview page > Instructions section > Edit. New agents use **generative orchestration** by default — required later for the Recurrence trigger in step 7 — but confirm it's on at Settings page > Generative AI section > Orchestration > "Use generative AI orchestration for your agent's responses?" (should read Yes; if the setting isn't there at all, an environment admin has disabled it and needs to turn it on tenant-side).
 3. Add the Knowledge source(s) from **Connect The Vault** above.
-4. Register the Tools this template needs before relying on the topics that use them:
-   - The vault-tools MCP server (`.copilotstudio/tools/`) for `new-person`, `new-project`, `gh-address-comments`, `gh-fix-ci`, and onboarding's helper scripts. Deploy it somewhere HTTPS-reachable, then on the agent's **Tools** page: **Add a tool > New tool > Model Context Protocol**, fill in the server name/description/URL, and finish the wizard. Full steps in `.copilotstudio/tools/README.md`.
-   - A GitHub connector or `gh`-capable Tool for `gh-commit`, `gh-address-comments`, `gh-fix-ci`, and `yeet`.
+4. Set up the Tools this template's write-back topics need. What's available under Tools > Add a tool varies a lot by tenant — some enterprise environments disable Flow, MCP, Custom connector, and REST API entirely, leaving only prebuilt **Connector** actions. Check what you actually have before picking an approach:
+   - **`create-vault-file` and `create-vault-folder`** (used by `new-person`/`new-project`) — in a Connector-only tenant, add SharePoint's (or OneDrive for Business's) **"Create file"** and **"Create new folder"** actions directly as Tools; no Flow needed. Full setup in `.copilotstudio/README.md` > "The create-vault-file / create-vault-folder Tools". If Agent flow *is* available to you, that's an equally valid way to build the same logic — see each topic's Platform Notes.
+   - **`fetch-pr-comments` and `inspect-pr-checks`** (used by `gh-address-comments`/`gh-fix-ci`) — depend on whether a GitHub connector with the right actions exists in your tenant, or Agent flow/REST API tool types are available to call GitHub's REST API directly. Check both before assuming these topics work — see `.copilotstudio/README.md` > "GitHub Topics".
+   - `gh-commit` and `yeet` can't run inside Copilot Studio at all, in any tenant (no working tree to act on) — kept for reference only; use a real coding agent or your own git client for those.
    - A browser-automation MCP tool or connector, only if you want `audit-ai-frontend`'s browser-QA steps to run rather than fall back to screenshot-only review.
+   - Optional: `.copilotstudio/tools/mcp_server.py` is a fallback for the write-back/GitHub topics if you have genuine persistent, IT-approved hosting and prefer reusing the bundled Python scripts to rebuilding the logic as Tools — see `.copilotstudio/tools/README.md` for when that actually makes sense (and when it doesn't, e.g. free/ephemeral hosts, or a locked-down corporate device that also blocks the local tooling needed to test it).
 5. For each folder under `.copilotstudio/topics/`, create a matching Topic using that folder's `TOPIC.md` — see `.copilotstudio/README.md` for the exact steps.
 6. Publish to at least one channel: Microsoft Teams, a custom website, or Microsoft 365 Copilot (if licensed).
 7. Once a conversation is running, say `onboard me` to start first-meeting onboarding, which will offer to set up a recurring check-in as a **Recurrence** trigger: on the agent's **Overview** page, **Triggers** section > **Add trigger** > select the Recurrence trigger and set the cadence. This needs generative orchestration turned on (step 2) and, in some tenants, an admin to turn on "solution-aware cloud flow sharing" for the environment before the Triggers option appears at all.
