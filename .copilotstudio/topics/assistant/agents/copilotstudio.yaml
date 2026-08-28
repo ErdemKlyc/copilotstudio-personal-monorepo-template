@@ -1,0 +1,9 @@
+display_name: "Assistant"
+short_description: "Ongoing work support: reply drafts, follow-ups, and check-ins."
+starter_prompt: "Help me stay on top of my work today."
+trigger_phrases:
+  - "talk to assistant"
+  - "hey assistant"
+  - "what should I know today"
+  - "catch me up"
+  - "draft a reply for this"

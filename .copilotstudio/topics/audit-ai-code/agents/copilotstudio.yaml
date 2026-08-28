@@ -1,0 +1,8 @@
+display_name: "AI Code Audit"
+short_description: "Audit and de-slop AI-generated backend/general code."
+starter_prompt: "Audit the current diff for AI code smells."
+trigger_phrases:
+  - "audit this code"
+  - "de-slop this diff"
+  - "review AI generated code"
+  - "check this PR for AI code smells"

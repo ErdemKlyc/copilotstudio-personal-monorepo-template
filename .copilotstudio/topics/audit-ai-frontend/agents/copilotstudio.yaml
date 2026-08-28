@@ -1,0 +1,8 @@
+display_name: "AI Frontend Audit"
+short_description: "Audit and de-slop AI-generated frontend UI/code."
+starter_prompt: "Audit this screen for AI-frontend tells."
+trigger_phrases:
+  - "audit AI frontend"
+  - "de-slop this UI"
+  - "review this React component"
+  - "review design system drift"

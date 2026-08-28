@@ -1,0 +1,7 @@
+display_name: "New Project"
+short_description: "Bootstrap a project or experiment folder."
+starter_prompt: "Start a new project called {name}."
+trigger_phrases:
+  - "start a new project"
+  - "create a new experiment"
+  - "bootstrap a project folder"

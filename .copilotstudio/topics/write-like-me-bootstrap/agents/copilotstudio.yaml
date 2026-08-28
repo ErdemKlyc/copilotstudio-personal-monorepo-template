@@ -1,0 +1,7 @@
+display_name: "Write Like Me Bootstrap"
+short_description: "Bootstrap a writing-style topic from sent messages."
+starter_prompt: "Learn my writing style from my sent email and chats."
+trigger_phrases:
+  - "learn my writing style"
+  - "create a write like me topic"
+  - "analyze my sent messages"

@@ -1,0 +1,106 @@
+name: Package template
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Choose package version
+        id: version
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            version="${GITHUB_REF_NAME}"
+          else
+            version="ci-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
+          fi
+          echo "value=${version}" >> "${GITHUB_OUTPUT}"
+
+      - name: Validate markdown frontmatter
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          root = Path.cwd()
+          markdown_files = sorted(path for path in root.glob("**/*.md") if ".git" not in path.parts)
+          if not markdown_files:
+              raise SystemExit("no markdown files found")
+
+          for path in markdown_files:
+              text = path.read_text()
+              if not text.startswith("---\n"):
+                  raise SystemExit(f"missing frontmatter: {path}")
+              frontmatter = text.split("---", 2)[1]
+              if "last_edited:" not in frontmatter:
+                  raise SystemExit(f"missing last_edited: {path}")
+
+          for path in sorted((root / ".copilotstudio" / "topics").glob("*/TOPIC.md")):
+              frontmatter = path.read_text().split("---", 2)[1]
+              keys = {
+                  line.partition(":")[0].strip()
+                  for line in frontmatter.splitlines()
+                  if line.strip()
+              }
+              if keys != {"name", "description", "last_edited"}:
+                  raise SystemExit(f"bad topic frontmatter shape: {path}")
+          PY
+
+      - name: Build zip
+        shell: bash
+        run: |
+          version="${{ steps.version.outputs.value }}"
+          package_dir="dist/personal-monorepo"
+          mkdir -p "${package_dir}"
+          rsync -a \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude ".DS_Store" \
+            --exclude "__pycache__/" \
+            --exclude ".pytest_cache/" \
+            --exclude ".ruff_cache/" \
+            --exclude ".venv/" \
+            --exclude "dist/" \
+            ./ "${package_dir}/"
+          cd dist
+          zip -qr "personal-monorepo-template-copilotstudio-${version}.zip" personal-monorepo
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: personal-monorepo-template-copilotstudio-${{ steps.version.outputs.value }}
+          path: dist/personal-monorepo-template-copilotstudio-${{ steps.version.outputs.value }}.zip
+          if-no-files-found: error
+
+      - name: Publish release asset
+        if: github.ref_type == 'tag'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${{ steps.version.outputs.value }}"
+          asset="dist/personal-monorepo-template-copilotstudio-${version}.zip"
+          if gh release view "${version}" >/dev/null 2>&1; then
+            gh release upload "${version}" "${asset}" --clobber
+          else
+            gh release create "${version}" \
+              "${asset}" \
+              --title "${version}" \
+              --notes "Template package ${version}" \
+              --latest
+          fi

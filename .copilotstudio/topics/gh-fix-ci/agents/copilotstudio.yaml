@@ -1,0 +1,7 @@
+display_name: "GH Fix CI"
+short_description: "Debug and fix failing GitHub Actions PR checks."
+starter_prompt: "Debug the failing checks on this PR."
+trigger_phrases:
+  - "fix the failing CI checks"
+  - "debug this GitHub Actions failure"
+  - "why is my PR check failing"

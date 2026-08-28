@@ -1,0 +1,7 @@
+display_name: "New Person"
+short_description: "Bootstrap a public-safe people/*.md note."
+starter_prompt: "Add a person note for {name}."
+trigger_phrases:
+  - "add a person note"
+  - "create a profile for this collaborator"
+  - "remember this person's preferences"

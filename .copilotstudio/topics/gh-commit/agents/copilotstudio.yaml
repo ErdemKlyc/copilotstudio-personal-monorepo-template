@@ -1,0 +1,7 @@
+display_name: "GH Commit"
+short_description: "Split diffs into semantic git commits"
+starter_prompt: "Review the current diff and split it into semantic commits."
+trigger_phrases:
+  - "commit my changes"
+  - "split this diff into commits"
+  - "clean up my local history"

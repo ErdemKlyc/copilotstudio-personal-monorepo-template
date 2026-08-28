@@ -1,0 +1,7 @@
+display_name: "Simple HTML Artifact"
+short_description: "Build information-first single-file HTML pages."
+starter_prompt: "Build a simple HTML report for {subject}."
+trigger_phrases:
+  - "build an HTML report"
+  - "make a static info page"
+  - "build an index.html for this"

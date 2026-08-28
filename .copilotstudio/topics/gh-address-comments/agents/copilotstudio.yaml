@@ -1,0 +1,7 @@
+display_name: "PR Comment Handler"
+short_description: "Address review comments on the current PR."
+starter_prompt: "Address the open review comments on this PR."
+trigger_phrases:
+  - "address the PR comments"
+  - "handle the review feedback"
+  - "respond to reviewer comments on this PR"

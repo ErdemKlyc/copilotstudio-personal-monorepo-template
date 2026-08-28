@@ -1,0 +1,8 @@
+display_name: "AI Writing Audit"
+short_description: "Audit text for AI writing tells and citation issues."
+starter_prompt: "Audit this draft for AI writing tells."
+trigger_phrases:
+  - "audit this writing for AI slop"
+  - "does this sound like an AI chatbot wrote it"
+  - "check these citations"
+  - "clean up LLM writing tells"

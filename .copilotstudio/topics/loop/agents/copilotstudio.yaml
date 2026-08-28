@@ -1,0 +1,8 @@
+display_name: "Loop"
+short_description: "Set up a recurring scheduled trigger."
+starter_prompt: "Keep checking on this and let me know when it changes."
+trigger_phrases:
+  - "keep checking on this"
+  - "loop this"
+  - "check again later"
+  - "monitor this and let me know"

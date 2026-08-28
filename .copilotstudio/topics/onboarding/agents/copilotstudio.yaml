@@ -1,0 +1,7 @@
+display_name: "Assistant Onboarding"
+short_description: "Meet Assistant and set up useful work memory."
+starter_prompt: "Onboard me."
+trigger_phrases:
+  - "onboard me"
+  - "set up assistant"
+  - "get started with assistant"

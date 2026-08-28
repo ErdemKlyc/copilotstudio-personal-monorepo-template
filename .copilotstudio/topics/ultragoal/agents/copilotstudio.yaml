@@ -1,0 +1,8 @@
+display_name: "Ultragoal"
+short_description: "Design and activate durable, verifier-backed goals."
+starter_prompt: "Set a goal to {outcome}."
+trigger_phrases:
+  - "set a goal"
+  - "start a persistent goal"
+  - "activate goal mode"
+  - "track this as a long running objective"

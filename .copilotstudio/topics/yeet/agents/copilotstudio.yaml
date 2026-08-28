@@ -1,0 +1,7 @@
+display_name: "Yeet"
+short_description: "Stage, commit, push, and open a PR in one flow."
+starter_prompt: "Yeet this: {description}"
+trigger_phrases:
+  - "yeet this"
+  - "stage, commit, push, and open a PR"
+  - "ship this as a PR"

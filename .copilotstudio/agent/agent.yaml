@@ -1,0 +1,92 @@
+# Maker-facing configuration reference for setting up "Assistant" in Microsoft
+# Copilot Studio. This is NOT a `pac`-importable solution file — Copilot Studio
+# agents are authored in the maker portal (or via the Agents SDK/`pac` CLI with
+# real solution GUIDs this template can't fabricate). Treat this as the
+# checklist of values to enter by hand in Agent > Overview / Settings, kept in
+# source control so the configuration is reviewable and versioned like the
+# rest of this vault.
+#
+# Replaces the original template's .codex/plugins/assistant/plugin.json
+# (a ChatGPT-Apps-style manifest, which has no Copilot Studio equivalent).
+
+name: assistant
+version: "0.1.0"
+
+overview:
+  display_name: "Assistant"
+  description: >
+    A long-running work companion that helps map context, run first-meeting
+    onboarding, and prepare useful follow-ups, backed by this repo as a
+    shared-memory vault.
+  icon: assets/assistant/assistant-froge.png
+  instructions_file: instructions.md   # paste into Agent > Overview > Instructions
+
+conversation_starters:
+  - "Onboard me."
+  - "Help me stay on top of my work today."
+  - "Set a goal to {outcome}."
+  - "Start a new project called {name}."
+
+# Knowledge sources: Copilot Studio does not read a git repo directly. Sync
+# this vault to a location one of its native connectors can read, then add it
+# as a Knowledge source under Agent > Knowledge > Add knowledge.
+knowledge_sources:
+  - type: sharepoint_or_onedrive
+    note: >
+      Sync this repo (or a mirror of it) to a SharePoint document library or
+      OneDrive folder, then add that folder as a Knowledge source. This is how
+      projects/, experiments/, people/, and templates/ become readable by the
+      agent.
+  - type: public_website
+    note: >
+      Optional alternative if this vault is published as a static site
+      (for example via GitHub Pages) and you only need read access, not write-back.
+
+# Actions/Tools: each maps to a Topic in .copilotstudio/topics/. Topics that
+# shell out to the bundled Python scripts need a matching Action wired up —
+# see .copilotstudio/tools/README.md for the MCP-server option.
+topics:
+  - assistant
+  - onboarding
+  - loop
+  - ultragoal
+  - new-person
+  - new-project
+  - write-like-me-bootstrap
+  - simple-html-artifact
+  - audit-ai-code
+  - audit-ai-frontend
+  - audit-ai-writing
+  - gh-commit
+  - gh-address-comments
+  - gh-fix-ci
+  - yeet
+
+actions:
+  - name: vault-tools-mcp
+    type: mcp_server
+    note: >
+      Register the MCP server in .copilotstudio/tools/ as a custom Action
+      (Agent > Actions > Add an action > Add an MCP server) so topics that
+      shell out to new_person.py, new_project.py, fetch_comments.py, and
+      inspect_pr_checks.py can actually run. See tools/README.md.
+  - name: github-connector
+    type: connector
+    note: >
+      Add the GitHub connector (or an equivalent gh-capable Action) for
+      gh-commit, gh-address-comments, gh-fix-ci, and yeet.
+  - name: browser-automation
+    type: mcp_server_or_connector
+    note: >
+      Optional. Needed only for the browser-QA steps in audit-ai-frontend.
+
+publish_channels:
+  - microsoft_teams
+  - custom_website
+  - m365_copilot   # publish as an agent inside Microsoft 365 Copilot, if licensed
+
+triggers:
+  - name: "Assistant hourly check-in"
+    type: scheduled
+    recurrence: hourly
+    note: "Created via the loop topic once the user approves a recurring check-in."
