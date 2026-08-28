@@ -34,4 +34,4 @@ Report the created or updated path and summarize any fields still needing human 
 
 ## Platform Notes
 
-This topic assumes a shell/code-execution Action is available to run the bundled Python script against the vault repo (for example, a knowledge source synced to a repo the agent can also write back to, or a code-execution connector). If no such Action is registered, write the note by hand from the template instead.
+This topic assumes a shell/code-execution Tool is available to run the bundled Python script against the vault repo (for example, a knowledge source synced to a repo the agent can also write back to, or a code-execution connector). If no such Tool is registered, write the note by hand from the template instead.

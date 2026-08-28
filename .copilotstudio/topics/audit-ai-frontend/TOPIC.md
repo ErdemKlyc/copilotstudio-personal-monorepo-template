@@ -80,9 +80,9 @@ For implementation asks, patch the code directly. Prefer the smallest local abst
 
 - `references/patterns.md`: checklist of AI-frontend tells, code smells, and repair patterns.
 - `references/rubric.md`: compact UX/a11y/component/design-quality rubric for broader audits.
-- `references/workflows.md`: code-structure audit, browser QA, reference-packet, and brief-lock loops; delegates browser mechanics to whatever browser-automation Action is registered on this agent.
+- `references/workflows.md`: code-structure audit, browser QA, reference-packet, and brief-lock loops; delegates browser mechanics to whatever browser-automation Tool is registered on this agent.
 - `references/sources.md`: research basis and links for periodic prompt refreshes.
 
 ## Platform Notes
 
-Codex CLI shipped built-in `$playwright`/`$playwright-interactive` skills; Copilot Studio has no equivalent bundled browser tool. Register a Playwright-based MCP tool or custom connector as an Action on this agent (or on the parent agent this topic belongs to) before relying on the browser-QA steps in `references/workflows.md`. Without one, treat this as a screenshot/code-review-only audit.
+Codex CLI shipped built-in `$playwright`/`$playwright-interactive` skills; Copilot Studio has no equivalent bundled browser tool. Register a Playwright-based MCP tool or custom connector as a Tool on this agent (or on the parent agent this topic belongs to) before relying on the browser-QA steps in `references/workflows.md`. Without one, treat this as a screenshot/code-review-only audit.

@@ -128,4 +128,4 @@ Before finishing:
 
 ## Platform Notes
 
-This topic assumes the agent can write out an HTML file for the user (via a file-output Action, or by returning the HTML in the response for the user to save). Copilot Studio does not host or serve files on its own; if you need a hosted page rather than a downloadable file, publish the output to SharePoint/OneDrive or a static site host separately.
+This topic assumes the agent can write out an HTML file for the user (via a file-output Tool, or by returning the HTML in the response for the user to save). Copilot Studio does not host or serve files on its own; if you need a hosted page rather than a downloadable file, publish the output to SharePoint/OneDrive or a static site host separately.

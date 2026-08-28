@@ -39,4 +39,4 @@ Report the created folder and any missing fields that need human input.
 
 ## Platform Notes
 
-This topic assumes a shell/code-execution Action is available to run the bundled Python script against the vault repo. If no such Action is registered, create the folder and files by hand from `templates/project_README.md`, `templates/experiment_README.md`, and `templates/PROJECT_AGENTS.md`.
+This topic assumes a shell/code-execution Tool is available to run the bundled Python script against the vault repo. If no such Tool is registered, create the folder and files by hand from `templates/project_README.md`, `templates/experiment_README.md`, and `templates/PROJECT_AGENTS.md`.

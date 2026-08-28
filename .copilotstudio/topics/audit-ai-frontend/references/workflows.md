@@ -42,9 +42,9 @@ Do not abstract only to look clever. Extract when it reduces current duplication
 
 Use this loop whenever the page can be rendered locally.
 
-Delegate browser operation details to whatever browser-automation action this agent has registered. Copilot Studio has no built-in local browser CLI, so this depends on your Actions/Tools setup:
+Delegate browser operation details to whatever browser-automation Tool this agent has registered. Copilot Studio has no built-in local browser CLI, so this depends on your Tools setup:
 
-- If a Playwright-based MCP tool or custom connector is registered as an Action on this agent, use it for page loads, snapshots, screenshots, and trace capture.
+- If a Playwright-based MCP tool or custom connector is registered as a Tool on this agent, use it for page loads, snapshots, screenshots, and trace capture.
 - If a `browser-qa` topic exists elsewhere in this vault for persistent sessions and a shared QA inventory, use it instead of re-deriving browser mechanics here.
 - If no browser action is registered, say so explicitly and fall back to screenshot-only review (label implementation-risk findings `Inferred`, per the parent skill).
 - Keep this workflow focused on what to inspect for AI-frontend quality, not how to operate a specific browser tool.

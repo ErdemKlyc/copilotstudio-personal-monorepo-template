@@ -89,4 +89,4 @@ Use these when relevant:
 
 ## Platform Boundary
 
-Copilot Studio agents only have the capabilities wired up as Knowledge sources or Actions (see `.copilotstudio/agent/agent.yaml` and `.copilotstudio/README.md`). Do not assume file access, git access, browser access, or messaging access exists without checking that the corresponding connector/Action is registered.
+Copilot Studio agents only have the capabilities wired up as Knowledge sources or Tools (see `.copilotstudio/agent/agent.yaml` and `.copilotstudio/README.md`). Do not assume file access, git access, browser access, or messaging access exists without checking that the corresponding connector/Tool is registered.

@@ -38,4 +38,4 @@ last_edited: 2026-06-15
 
 ## Platform Notes
 
-This topic assumes the agent has a shell/code-execution Action available to run `git` and `gh`. Copilot Studio does not run local processes by default — wire up that Action (or an equivalent GitHub connector) before relying on this topic end to end. The `codex/...` branch/PR-title convention from the original template is renamed to `copilot/...` here; change it back if your team uses a different prefix.
+This topic assumes the agent has a shell/code-execution Tool available to run `git` and `gh`. Copilot Studio does not run local processes by default — wire up that Tool (or an equivalent GitHub connector) before relying on this topic end to end. The `codex/...` branch/PR-title convention from the original template is renamed to `copilot/...` here; change it back if your team uses a different prefix.

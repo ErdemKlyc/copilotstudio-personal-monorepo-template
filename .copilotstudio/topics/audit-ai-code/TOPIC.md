@@ -107,4 +107,4 @@ For implementation asks, patch the code directly, then summarize what was simpli
 
 ## Platform Notes
 
-This topic assumes the agent has a code-editing action available (for example, a GitHub connector/Action that can read and write files in a repo, or a code-interpreter-style tool). Copilot Studio agents do not edit local files by default the way a CLI coding agent does — wire up that Action before expecting "patch the code directly" to work end to end; otherwise this topic should fall back to review-only output.
+This topic assumes the agent has a code-editing tool available (for example, a GitHub connector/Tool that can read and write files in a repo, or a code-interpreter-style tool). Copilot Studio agents do not edit local files by default the way a CLI coding agent does — wire up that Tool before expecting "patch the code directly" to work end to end; otherwise this topic should fall back to review-only output.

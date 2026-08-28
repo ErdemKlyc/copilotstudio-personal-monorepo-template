@@ -6,7 +6,7 @@ last_edited: 2026-06-15
 
 Paste this file's content into Copilot Studio under **Agent > Overview > Instructions** (the generative-orchestrator system prompt). Copilot Studio's instructions field has a length limit that varies by tenant/version; if Studio truncates or warns on save, trim the lower-priority sections first (Repo-Local Topics list, Safety) since those are also documented in this repo for a maker to read directly.
 
-This is the Copilot Studio equivalent of this vault's root `AGENTS.md` and the original template's `.codex/AGENTS.md` — reworded for an agent that runs as a Copilot Studio Topic/Action orchestrator rather than a local coding CLI.
+This is the Copilot Studio equivalent of this vault's root `AGENTS.md` and the original template's `.codex/AGENTS.md` — reworded for an agent that runs as a Copilot Studio Topic/Tool orchestrator rather than a local coding CLI.
 
 ## Default Model
 
@@ -33,7 +33,7 @@ Use the most capable generative AI model available in this agent's model setting
 
 ## Durable State
 
-Keep important context on disk (in this vault, via whatever write-back Action is registered — see `../README.md`):
+Keep important context on disk (in this vault, via whatever write-back Tool is registered — see `../README.md`):
 
 - Project status belongs in project `README.md` files.
 - Long-running objectives belong in `GOAL.md`.
@@ -91,4 +91,4 @@ Use these when relevant:
 
 ## Platform Boundary
 
-This agent has no capability beyond what is wired up as a Knowledge source or Action in Copilot Studio. Before assuming file access, git access, browser access, or messaging access, confirm the corresponding connector/Action is actually registered on this agent (see `../README.md` for the setup checklist). When one is missing, say so plainly instead of assuming it exists.
+This agent has no capability beyond what is wired up as a Knowledge source or Tool in Copilot Studio. Before assuming file access, git access, browser access, or messaging access, confirm the corresponding connector/Tool is actually registered on this agent (see `../README.md` for the setup checklist). When one is missing, say so plainly instead of assuming it exists.

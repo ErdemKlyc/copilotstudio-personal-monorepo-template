@@ -107,4 +107,4 @@ before writing the generated topic.
 
 ## Platform Notes
 
-This assumes at least one messaging/email Action or knowledge connector is registered on the agent (Outlook, Teams, or Slack). If none is connected, say so and offer to proceed once one is available, per the Source Scan section above.
+This assumes at least one messaging/email Tool or knowledge connector is registered on the agent (Outlook, Teams, or Slack). If none is connected, say so and offer to proceed once one is available, per the Source Scan section above.

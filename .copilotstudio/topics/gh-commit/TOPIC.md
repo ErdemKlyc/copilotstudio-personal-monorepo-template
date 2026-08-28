@@ -58,4 +58,4 @@ Turn the current working tree into a small set of clean commits without mixing u
 
 ## Platform Notes
 
-This topic assumes the agent has a shell/code-execution Action available to run `git`. Copilot Studio does not run local processes by default — wire up that Action (or an equivalent source-control connector) before relying on this topic end to end.
+This topic assumes the agent has a shell/code-execution Tool available to run `git`. Copilot Studio does not run local processes by default — wire up that Tool (or an equivalent source-control connector) before relying on this topic end to end.

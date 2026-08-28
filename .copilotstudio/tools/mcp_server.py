@@ -2,24 +2,31 @@
 """MCP server exposing this vault's bundled Python scripts as tools.
 
 Copilot Studio has no built-in shell/filesystem action, but it can call an
-MCP server registered as a custom Action (Agent > Actions > Add an action >
-Add an MCP server). This server is the bridge: it runs the existing
+MCP server registered as a Tool (agent's Tools page > Add a tool > New tool
+> Model Context Protocol). This server is the bridge: it runs the existing
 new_person.py / new_project.py / fetch_comments.py / inspect_pr_checks.py
 scripts as subprocesses and returns their output, so the Topics in
 .copilotstudio/topics/ that reference those scripts can actually execute
-when this agent calls them as an Action.
+when this agent calls them as a Tool.
 
-Run locally over stdio for testing:
+Copilot Studio's MCP onboarding wizard only supports the Streamable HTTP
+transport (it dropped SSE support after August 2025) and connects to a
+Server URL, not a local stdio process — so this runs over streamable-http,
+not the FastMCP default. Run it locally for testing:
+
     python mcp_server.py
+    # serves http://127.0.0.1:8000/mcp
 
-Deploy wherever your organization runs MCP servers reachable from Copilot
-Studio (an Azure Container App, App Service, or any HTTPS endpoint you
-control), then register that endpoint as an MCP Action on the agent. See
-README.md in this folder for the registration steps.
+Deploy wherever your organization runs services reachable over HTTPS from
+Copilot Studio (an Azure Container App, App Service, or similar), put a
+reverse proxy/TLS in front of it, and register that HTTPS URL + /mcp path
+as the Server URL in the MCP onboarding wizard. See README.md in this
+folder for the exact registration steps.
 """
 
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -133,4 +140,9 @@ def new_project_note(title: str, slug: str = "", dry_run: bool = False) -> str:
 
 
 if __name__ == "__main__":
-    mcp.run()
+    mcp.run(
+        transport="streamable-http",
+        host=os.environ.get("MCP_HOST", "127.0.0.1"),
+        port=int(os.environ.get("MCP_PORT", "8000")),
+        path="/mcp",
+    )

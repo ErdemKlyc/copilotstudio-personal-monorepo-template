@@ -82,6 +82,6 @@ Every turn should end with a clear question, next step, setup offer, or final re
 
 ## Platform Notes
 
-- Connectors/actions in Copilot Studio (Teams, Outlook, SharePoint, GitHub, and so on) are added by a maker under Agent > Settings > and by wiring up Actions — an end user cannot self-serve "install plugins" the way the original Codex desktop app allowed. Frame connector gaps as something to flag for the maker, not something this conversation can install on its own unless the environment explicitly exposes that.
+- Connectors/Tools in Copilot Studio (Teams, Outlook, SharePoint, GitHub, and so on) are added by a maker on the agent's Tools page — an end user cannot self-serve "install plugins" the way the original Codex desktop app allowed. Frame connector gaps as something to flag for the maker, not something this conversation can install on its own unless the environment explicitly exposes that.
 - "Rename and pin the Assistant chat" from the original template has no direct Copilot Studio equivalent; see the Platform Notes in `../assistant/TOPIC.md`.
-- Recurring check-ins are Scheduled triggers, not chat-attached heartbeats — see the `loop` topic and `../assistant/references/heartbeat-philosophy.md`.
+- Recurring check-ins are Recurrence triggers, not chat-attached heartbeats — see the `loop` topic and `../assistant/references/heartbeat-philosophy.md`.

@@ -42,8 +42,8 @@ knowledge_sources:
       Optional alternative if this vault is published as a static site
       (for example via GitHub Pages) and you only need read access, not write-back.
 
-# Actions/Tools: each maps to a Topic in .copilotstudio/topics/. Topics that
-# shell out to the bundled Python scripts need a matching Action wired up —
+# Tools: each Topic below maps to a folder in .copilotstudio/topics/. Topics
+# that shell out to the bundled Python scripts need a matching Tool wired up —
 # see .copilotstudio/tools/README.md for the MCP-server option.
 topics:
   - assistant
@@ -62,18 +62,21 @@ topics:
   - gh-fix-ci
   - yeet
 
-actions:
+tools:
   - name: vault-tools-mcp
     type: mcp_server
     note: >
-      Register the MCP server in .copilotstudio/tools/ as a custom Action
-      (Agent > Actions > Add an action > Add an MCP server) so topics that
-      shell out to new_person.py, new_project.py, fetch_comments.py, and
-      inspect_pr_checks.py can actually run. See tools/README.md.
+      Deploy .copilotstudio/tools/mcp_server.py (Streamable HTTP, not stdio)
+      somewhere HTTPS-reachable, then register it on the agent's Tools page:
+      Add a tool > New tool > Model Context Protocol > fill in server
+      name/description/URL > Create > Add to agent. This is what lets topics
+      that shell out to new_person.py, new_project.py, fetch_comments.py, and
+      inspect_pr_checks.py actually run. See tools/README.md for the full
+      wizard walkthrough.
   - name: github-connector
     type: connector
     note: >
-      Add the GitHub connector (or an equivalent gh-capable Action) for
+      Add the GitHub connector (or an equivalent gh-capable Tool) for
       gh-commit, gh-address-comments, gh-fix-ci, and yeet.
   - name: browser-automation
     type: mcp_server_or_connector
@@ -85,8 +88,11 @@ publish_channels:
   - custom_website
   - m365_copilot   # publish as an agent inside Microsoft 365 Copilot, if licensed
 
+# Requires generative orchestration turned on (Overview > Orchestration), and
+# in some tenants an admin must turn on "solution-aware cloud flow sharing"
+# for the environment before Triggers appears on the Overview page at all.
 triggers:
   - name: "Assistant hourly check-in"
-    type: scheduled
+    type: recurrence   # Overview page > Triggers > Add trigger > Recurrence
     recurrence: hourly
     note: "Created via the loop topic once the user approves a recurring check-in."

@@ -77,4 +77,4 @@ Usage examples:
 
 ## Platform Notes
 
-This topic assumes a shell/code-execution Action is registered so the agent can run `gh` and the bundled Python script, or a GitHub connector Action that offers equivalent capability. Copilot Studio does not run local processes by default — wire that up before relying on this topic end to end. The Codex CLI original preferred an internal `oai_gh` wrapper; that has no Copilot Studio equivalent, so this topic uses plain `gh`.
+This topic assumes a shell/code-execution Tool is registered so the agent can run `gh` and the bundled Python script, or a GitHub connector Tool that offers equivalent capability. Copilot Studio does not run local processes by default — wire that up before relying on this topic end to end. The Codex CLI original preferred an internal `oai_gh` wrapper; that has no Copilot Studio equivalent, so this topic uses plain `gh`.

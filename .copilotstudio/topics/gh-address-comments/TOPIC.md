@@ -31,4 +31,4 @@ Notes:
 
 ## Platform Notes
 
-The original Codex CLI version of this skill preferred an internal `oai_gh` CLI wrapper over plain `gh`, falling back to `gh` when it was not present. That wrapper is a Codex-sandbox-specific convenience and has no Copilot Studio equivalent, so this topic uses plain `gh` throughout. This topic also assumes the agent has a shell/code-execution Action available to actually run `gh` and the bundled script — Copilot Studio does not run local processes by default, so wire that Action (or an equivalent GitHub connector) up before relying on this topic end to end.
+The original Codex CLI version of this skill preferred an internal `oai_gh` CLI wrapper over plain `gh`, falling back to `gh` when it was not present. That wrapper is a Codex-sandbox-specific convenience and has no Copilot Studio equivalent, so this topic uses plain `gh` throughout. This topic also assumes the agent has a shell/code-execution Tool available to actually run `gh` and the bundled script — Copilot Studio does not run local processes by default, so wire that Action (or an equivalent GitHub connector) up before relying on this topic end to end.
