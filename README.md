@@ -89,6 +89,47 @@ Useful starting points:
 - `new-person`: create a person note
 - `write-like-me-bootstrap`: create a personal writing-style topic from Teams/Slack and email
 
+## Example Prompts
+
+Once the agent is set up, here's what you'd actually type. These map directly to the Topics under `.copilotstudio/topics/` — grouped the same way as the root `AGENTS.md`.
+
+**Assistant (day-to-day)**
+- "Onboard me." — first-time setup, or fills gaps if setup is partial.
+- "What should I know today?" / "Catch me up."
+- "Draft a reply for this." (paste the email/message thread first)
+- "Keep an eye on this for me."
+
+**Bootstrapping**
+- "Start a new project called Q3 Vendor Review."
+- "Create a new experiment for the pricing model spike."
+- "Add a person note for Sarah, our new IT procurement lead."
+- "Learn my writing style from my sent email and Teams chats."
+
+**Goals**
+- "Set a goal to get all open PRs merged by Friday, with tests passing as the verifier."
+- "Start a persistent goal for the Q3 migration — track it in GOAL.md."
+- "What's our leverage with this goal — activate it."
+
+**Automations**
+- "Keep checking on this and let me know when the vendor responds."
+- "Loop this every morning until the deploy finishes."
+- "Check again later — say, in a couple hours."
+
+**Artifacts**
+- "Build an HTML report summarizing this quarter's project status."
+- "Make a static info page comparing these three vendor options."
+
+**Audits**
+- "Audit this code for AI-generated smells." (paste a diff or point at a PR)
+- "De-slop this UI — review this React component for generic AI tells."
+- "Does this sound like an AI chatbot wrote it? Check these citations too."
+
+**GitHub workflows** (need the Tools/connector setup in Step 4 above)
+- "Commit my changes — split this diff into semantic commits."
+- "Address the PR comments on my current branch."
+- "Fix the failing CI checks on this PR."
+- "Yeet this — stage, commit, push, and open a PR." *(only works from a real coding agent/git client, not from inside Copilot Studio — see `gh-commit`/`yeet`'s Platform Notes)*
+
 ## Structure
 
 - `projects/`: long-lived work
