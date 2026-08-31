@@ -19,6 +19,38 @@ This repo is the Assistant shared-memory vault. Onboarding should update this
 repo in place; it should not create a nested `vault/` directory unless you
 explicitly choose a different location.
 
+## It Runs Without You
+
+The point of this template isn't a better chatbot. It's an agent that acts when you're not in the conversation.
+
+Copilot Studio [event triggers](https://learn.microsoft.com/en-us/microsoft-copilot-studio/authoring-triggers-about) fire with no user message at all — a connector sends the agent a payload and it acts on your instructions. That's what the `loop` and `ultragoal` topics are built on:
+
+- **A schedule** — a Recurrence trigger for morning and afternoon check-ins, or a goal that resumes itself until its verifier passes.
+- **Something happening** — an item created in SharePoint, a file landing in OneDrive, a Planner task completed, a Dataverse row changing, an email arriving.
+
+So `Keep an eye on this for me` isn't a figure of speech. It becomes a trigger that outlives the chat window.
+
+Three things to know before relying on it: **every trigger payload is a billable message** (a 10-minute recurrence sends one every 10 minutes, forever), **triggers run on the agent maker's credentials** — anyone using the published agent may reach data through that authorization, and the environment needs **solution-aware cloud flow sharing** turned on, with available triggers subject to your org's Power Automate data policies.
+
+## How It Compares To Copilot Alone
+
+If your tenant has Microsoft 365 Copilot with [Work IQ](https://learn.microsoft.com/en-us/microsoft-copilot-studio/add-work-iq), you already have an intelligence layer that grounds agents in your organizational context. It solves a genuinely different problem from this vault:
+
+| | Microsoft 365 Copilot + Work IQ | This vault |
+|---|---|---|
+| **Where its knowledge comes from** | Inferred automatically from activity — files, email, meetings, chats, collaboration patterns | Authored deliberately: written by you, or by the agent with your approval |
+| **What it knows best** | What *happened* — who you met, what you sent, which documents moved | What you *decided*, why, and what you rejected |
+| **How behavior is defined** | Microsoft's model behavior, managed tenant-wide | 15 Topics you author, edit, and version yourself |
+| **Reviewability** | A managed service — you can't diff what it concluded about you | Markdown in git: diff it, review it in a PR, roll it back |
+| **Portability** | Lives inside the tenant | Yours to take anywhere |
+| **Cost** | Usage-based Copilot Credits, needs an admin spending policy | Files in storage you already pay for |
+| **Availability** | Preview; admin-gated; read-only unless an admin enables writes | Works even in locked-down, Connector-only tenants |
+| **Running without you** | Event triggers | Event triggers — the same feature |
+
+The short version: **Work IQ knows what happened; the vault knows what you decided.** Activity data is a weak record of rationale — it can see you exchanged forty emails about a vendor, but not that you ruled one out over a contract term someone raised out loud.
+
+They compose rather than compete. Work IQ is added as an MCP tool, the vault as a Knowledge source plus write-back Tools, so one agent can have both: live signal from Work IQ, durable decisions and authored procedure from here. That's the strongest setup if you have both available.
+
 ## What You Can Do With It
 
 Six things worth setting this up for. Each maps to a real Topic under `.copilotstudio/topics/`, and the quoted line is what you'd actually type into the chat.
