@@ -19,6 +19,14 @@ This repo is the Assistant shared-memory vault. Onboarding should update this
 repo in place; it should not create a nested `vault/` directory unless you
 explicitly choose a different location.
 
+## How It Fits Together
+
+![The vault repo synced into SharePoint or OneDrive, read by the Assistant agent as a Knowledge source, with Tools writing back](docs/images/vault-architecture.png)
+
+The one thing worth understanding before you start: **Copilot Studio cannot read a git repository.** The vault has to be synced or mirrored somewhere it can reach — SharePoint, OneDrive, or Dataverse — and that copy is what you add as a Knowledge source. See **Connect The Vault** below for the options.
+
+Reading and writing are also separate problems. Reading needs only a Knowledge source. Writing back — new project folders, updated `people/*.md`, `GOAL.md` files — needs Tools registered on the agent, which is why **Set Up The Agent** step 4 exists and why what's available there varies by tenant.
+
 ## Prerequisites
 
 - A Microsoft 365 tenant with access to [Copilot Studio](https://copilotstudio.microsoft.com).
