@@ -31,8 +31,14 @@ def frontmatter(path: Path) -> dict[str, object]:
 
 
 def test_markdown_has_last_edited_frontmatter() -> None:
+    # Skip dot-directories except .copilotstudio: .git, and tool caches like
+    # .pytest_cache that ship a README.md of their own.
     markdown_files = sorted(
-        path for path in ROOT.glob("**/*.md") if ".git" not in path.parts
+        path
+        for path in ROOT.glob("**/*.md")
+        if not any(
+            part.startswith(".") and part != ".copilotstudio" for part in path.parts
+        )
     )
     assert markdown_files
     for path in markdown_files:

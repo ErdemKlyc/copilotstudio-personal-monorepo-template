@@ -19,6 +19,48 @@ This repo is the Assistant shared-memory vault. Onboarding should update this
 repo in place; it should not create a nested `vault/` directory unless you
 explicitly choose a different location.
 
+## What You Can Do With It
+
+Six things worth setting this up for. Each maps to a real Topic under `.copilotstudio/topics/`, and the quoted line is what you'd actually type into the chat.
+
+**Pick up where you left off, weeks later**
+
+> `Catch me up.` — or `What should I know today?`
+
+A normal chatbot starts every conversation from nothing. Because your projects, people, and decisions live as files in the vault, this agent reads its way back into context first: what's in flight, who's involved, what was decided and why. The longer the vault lives, the better this gets.
+
+**Set a goal that outlives the conversation**
+
+> `Set a goal to migrate the reporting pipeline, with the integration tests passing as the verifier.`
+
+The `ultragoal` topic writes durable `GOAL.md`, `WORKLOG.md`, and `RESULT.md` files rather than holding the goal in session memory. The verifier is the important part — a finish line that can actually *fail*, so "done" means something checkable rather than the agent declaring victory. Paired with a scheduled trigger, it picks the work back up without you reopening the chat.
+
+**Have it watch something while you're not looking**
+
+> `Keep an eye on the vendor response and let me know when it lands.`
+
+The `loop` topic turns that sentence into a Recurrence trigger on the agent — it fires on a cadence independent of any open conversation, and posts where you'll actually see it. No "check back in 20 minutes" theater; the agent genuinely isn't running until the trigger fires.
+
+**Teach it your writing voice, once**
+
+> `Learn my writing style from my sent email and Teams messages.`
+
+`write-like-me-bootstrap` reads how you actually write across different postures — a terse Teams reply is not a client email — and generates a durable style-profile topic from it. Later drafts sound like you instead of like a chatbot. It deliberately captures the *voice* rather than copying raw private messages into files that stick around.
+
+**Turn scattered findings into a page someone will read**
+
+> `Build an HTML report comparing these three vendor options.`
+
+`simple-html-artifact` produces one self-contained, browser-openable file built for comprehension rather than conversion — real information in the first viewport, not a hero banner. It explicitly avoids the gradient-hero, glass-card, icon-grid look that makes a page read as machine-generated.
+
+**Catch AI slop before it ships**
+
+> `Audit this code for AI-generated smells.` — or `Does this sound like a chatbot wrote it?`
+
+Three separate audit topics cover code (`audit-ai-code`), UI (`audit-ai-frontend`), and prose (`audit-ai-writing`). Useful on your own drafts, and more useful on anything arriving from someone else's agent.
+
+The full prompt list, grouped by task, is in [Example Prompts](#example-prompts) below.
+
 ## How It Fits Together
 
 ![The vault repo synced into SharePoint or OneDrive, read by the Assistant agent as a Knowledge source, with Tools writing back](docs/images/vault-architecture.png)
@@ -99,7 +141,7 @@ Useful starting points:
 
 ## Example Prompts
 
-Once the agent is set up, here's what you'd actually type. These map directly to the Topics under `.copilotstudio/topics/` — grouped the same way as the root `AGENTS.md`.
+The complete list, grouped by task — **What You Can Do With It** near the top covers the highlights in more depth. These map directly to the Topics under `.copilotstudio/topics/`, grouped the same way as the root `AGENTS.md`.
 
 **Assistant (day-to-day)**
 - "Onboard me." — first-time setup, or fills gaps if setup is partial.
